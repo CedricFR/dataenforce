@@ -23,9 +23,9 @@ def test_ellipsis():
     assert DName.only_specified == False
 
 def test_dtypes():
-    DName = Dataset["id": int, "name": object]
+    DName = Dataset["id": int, "name": object, "location"]
 
-    assert DName.columns == {"id", "name"}
+    assert DName.columns == {"id", "name", "location"}
     assert DName.dtypes == {'id': int, 'name': object}
     assert DName.only_specified == True
 

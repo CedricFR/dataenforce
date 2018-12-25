@@ -19,6 +19,16 @@ def test_validate_columns():
     with pytest.raises(TypeError):
         process(df3)
 
+def test_validate_combination():
+    df1 = pd.DataFrame(dict(a=[1,2,3]))
+    df2 = pd.DataFrame(dict(a=[1,2,3], b=[4,5,6]))
+
+    @validate
+    def process(data1: Dataset["a"], data2: Dataset["a", "b"]):
+        pass
+
+    process(df1, df2)
+
 def test_validate_ellipsis():
     df1 = pd.DataFrame(dict(a=[1,2,3]))
     df2 = pd.DataFrame(dict(a=[1,2,3], b=[4,5,6]))
@@ -52,7 +62,7 @@ def test_validate_dtypes():
     def process1(data: Dataset["a": int, "b": np.float, "c": object, "d": np.datetime64]):
         pass
     @validate
-    def process2(data: Dataset["a": float, ...]):
+    def process2(data: Dataset["a": float, "b", ...]):
         pass
     @validate
     def process3(data: Dataset["a": np.datetime64, ...]):
