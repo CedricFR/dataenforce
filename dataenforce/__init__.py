@@ -17,7 +17,7 @@ def validate(f):
                 hint = hints[argument_name]
 
                 if not isinstance(value, pd.DataFrame):
-                    raise TypeError("%s is not a pandas Dataframe" % argument_value)
+                    raise TypeError("%s is not a pandas Dataframe" % value)
                 columns = set(value.columns)
                 if hint.only_specified and not columns == hint.columns:
                     raise TypeError("%s columns do not match required column set %s" % (argument_name, hint.columns))
@@ -62,8 +62,6 @@ class DatasetMeta(GenericMeta):
     @_tp_cache
     def __getitem__(self, parameters):
         if self.__origin__ is not None or self._gorg is not Dataset:
-            # Normal generic rules apply if this is not the first subscription
-            # or a subscription of a subclass.
             return super().__getitem__(parameters)
         if parameters == ():
             return super().__getitem__((_TypingEmpty,))
