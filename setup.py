@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dataenforce",
-    version="0.0.1",
+    version="0.1",
     author="Cedric Canovas",
     author_email="dev@canovas.me",
-    description="Enforce columns & data types of pandas DataFrames",
+    description="Enforce column names & data types of pandas DataFrames",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/CedricFR/dataenforce",
@@ -16,5 +16,6 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
+        "License :: OSI Approved :: Apache Software License"
     ],
 )
