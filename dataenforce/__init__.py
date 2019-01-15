@@ -15,8 +15,12 @@
 import inspect
 from functools import wraps
 import pandas as pd
-from typing import GenericMeta, _TypingEmpty, _tp_cache, Generic,get_type_hints
+from typing import _TypingEmpty, _tp_cache, Generic,get_type_hints
 import numpy as np
+try:
+    from typing import GenericMeta # Python 3.6
+except ImportError: # Python 3.7
+    class GenericMeta(type): pass
 
 def validate(f):
     signature = inspect.signature(f)
