@@ -79,10 +79,13 @@ process_data(pd.DataFrame(dict(id=[1,2]))) # Raises a TypeError, column name mis
 
 # How to test
 
-`dataenforce` uses `pytest` as a testing library. If you have `pytest` installed, just run `pytest` in the command line while being in the root folder.
+`dataenforce` uses `pytest` as a testing library. If you have `pytest` installed, just run `PYTHONPATH="." pytest` in the command line while being in the root folder.
 
 # Notes
 
 * You can use `dataenforce` to type-hint the return value of a function, but it is not currently possible to `validate` it (it is not included in the checks)
+* You can't use `@validate` on a function where you use non-base class type-hints as strings (like `def f() -> "MyClass"`). Issue related to PEP 563
+* This work is at experimental state. It is not production-ready. Please raise issues & send pull requests if you find/solve some bugs
 * `dataenforce` is released under the Apache License 2.0, meaning you can freely use the library and redistribute it, provided Copyright is kept
 * Dependencies: Pandas & Numpy
+* Tested with Python 3.6, 3.7, 3.8

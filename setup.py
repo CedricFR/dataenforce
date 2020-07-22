@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dataenforce",
-    version="0.1.1",
+    version="0.1.2",
     author="Cedric Canovas",
     author_email="dev@canovas.me",
     description="Enforce column names & data types of pandas DataFrames",

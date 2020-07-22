@@ -73,3 +73,34 @@ def test_validate_dtypes():
         process2(df)
     with pytest.raises(TypeError):
         process3(df)
+
+def test_validate_other_types():
+    df = pd.DataFrame(dict(a=[1,2,3]))
+
+    @validate
+    def process(data: Dataset["a"], other: int):
+        pass
+
+    process(df, 3)
+
+def test_return_type():
+    df = pd.DataFrame(dict(a=[1,2,3]))
+
+    class Klass:
+        pass
+
+    @validate
+    def process(data: Dataset["a"]) -> int:
+        return 2
+    
+    @validate
+    def process2(data: Dataset["a"]) -> Klass:
+        return Klass()
+
+    #@validate
+    #def process3(data: Dataset["a"]) -> "Klass":
+    #    return Klass()
+
+    process(df)
+    process2(df)
+    #process3(df) # -> This scenario fails, issue with eval in get_type_hints (read PEP 563)

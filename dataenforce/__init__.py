@@ -15,11 +15,11 @@
 import inspect
 from functools import wraps
 import pandas as pd
-from typing import _TypingEmpty, _tp_cache, Generic,get_type_hints
+from typing import _TypingEmpty, _tp_cache, Generic, get_type_hints
 import numpy as np
 try:
     from typing import GenericMeta # Python 3.6
-except ImportError: # Python 3.7
+except ImportError: # Python 3.7 
     class GenericMeta(type): pass
 
 def validate(f):
@@ -77,9 +77,12 @@ def _get_columns_dtypes(p):
 class DatasetMeta(GenericMeta):
     """Metaclass for Dataset (internal)."""
 
+    def __new__(metacls, name, bases, namespace, **kargs):
+        return super().__new__(metacls, name, bases, namespace)
+
     @_tp_cache
     def __getitem__(self, parameters):
-        if self.__origin__ is not None or self._gorg is not Dataset:
+        if hasattr(self, '__origin__') and (self.__origin__ is not None or self._gorg is not Dataset):
             return super().__getitem__(parameters)
         if parameters == ():
             return super().__getitem__((_TypingEmpty,))
@@ -106,7 +109,7 @@ class Dataset(pd.DataFrame, extra=Generic, metaclass=DatasetMeta):
     __slots__ = ()
 
     def __new__(cls, *args, **kwds):
-        if cls._gorg is Dataset:
+        if not hasattr(cls, '_gorg') or cls._gorg is Dataset:
             raise TypeError("Type Dataset cannot be instantiated; "
                             "use pandas.DataFrame() instead")
         return _generic_new(pd.DataFrame, cls, *args, **kwds)
