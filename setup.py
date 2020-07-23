@@ -1,7 +1,7 @@
 import setuptools
 
 with open("README.md", "r") as fh:
-    long_description = fh.read()
+    long_description = fh.read().replace("```py", "```")
 
 setuptools.setup(
     name="dataenforce",
