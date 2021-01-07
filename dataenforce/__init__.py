@@ -15,7 +15,7 @@
 import inspect
 from functools import wraps
 import pandas as pd
-from typing import _TypingEmpty, _tp_cache, Generic, get_type_hints
+from typing import _TypingEmpty, _tp_cache, Generic, get_type_hints, NewType
 import numpy as np
 try:
     from typing import GenericMeta # Python 3.6
@@ -58,9 +58,12 @@ def _get_columns_dtypes(p):
         columns.add(p)
     elif isinstance(p, slice):
         columns.add(p.start)
-        if not inspect.isclass(p.stop):
-            raise TypeError("Column type hints must be classes, error with %s" % repr(p.stop))
-        dtypes[p.start] = p.stop
+        stop_type = p.stop
+        if isinstance(stop_type, NewType):
+            stop_type = stop_type.__supertype__
+        if not inspect.isclass(stop_type):
+            raise TypeError("Column type hints must be classes or of type NewType, error with %s" % repr(stop_type))
+        dtypes[p.start] = stop_type
     elif isinstance(p, (list, set)):
         for el in p:
             subcolumns, subdtypes = _get_columns_dtypes(el)
