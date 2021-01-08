@@ -61,6 +61,8 @@ def _get_columns_dtypes(p):
         stop_type = p.stop
         if isinstance(stop_type, NewType):
             stop_type = stop_type.__supertype__
+        if hasattr(stop_type, "__origin__"):
+            stop_type = stop_type.__origin__
         if not inspect.isclass(stop_type):
             raise TypeError("Column type hints must be classes or of type NewType, error with %s" % repr(stop_type))
         dtypes[p.start] = stop_type
