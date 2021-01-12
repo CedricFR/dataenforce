@@ -50,6 +50,15 @@ def validate(f):
 
     return wrapper
 
+def _resolve_type(t):
+    # support for NewType in type hinting
+    if hasattr(t, "__supertype__"):
+        return _resolve_type(t.__supertype__)
+    # support for typing.List and typing.Dict
+    if hasattr(t, "__origin__"):
+        return _resolve_type(t.__origin__)
+    return t
+
 def _get_columns_dtypes(p):
     columns = set()
     dtypes = {}
@@ -58,11 +67,7 @@ def _get_columns_dtypes(p):
         columns.add(p)
     elif isinstance(p, slice):
         columns.add(p.start)
-        stop_type = p.stop
-        if isinstance(stop_type, NewType):
-            stop_type = stop_type.__supertype__
-        if hasattr(stop_type, "__origin__"):
-            stop_type = stop_type.__origin__
+        stop_type = _resolve_type(p.stop)
         if not inspect.isclass(stop_type):
             raise TypeError("Column type hints must be classes or of type NewType, error with %s" % repr(stop_type))
         dtypes[p.start] = stop_type
