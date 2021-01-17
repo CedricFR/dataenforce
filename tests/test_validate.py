@@ -83,6 +83,24 @@ def test_validate_other_types():
 
     process(df, 3)
 
+def test_validate_newtype():
+    from typing import NewType
+
+    UserId = NewType('UserId', int)
+
+    df = pd.DataFrame(dict(a=[UserId(1), UserId(2), UserId(3)], b=["a","b","c"]))
+    df2 = pd.DataFrame(dict(a=["1","2","3"], b=["a","b","c"]))
+
+    @validate
+    def process(data: Dataset["a": UserId, "b": object]):
+        pass
+
+    process(df)
+
+    with pytest.raises(TypeError):
+        process(df2)
+     
+
 def test_return_type():
     df = pd.DataFrame(dict(a=[1,2,3]))
 
