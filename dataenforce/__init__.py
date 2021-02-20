@@ -61,6 +61,12 @@ def _get_columns_dtypes(p):
         if not inspect.isclass(p.stop):
             raise TypeError("Column type hints must be classes, error with %s" % repr(p.stop))
         dtypes[p.start] = p.stop
+    elif isinstance(p, dict):
+        for key, value in p.items():
+            columns.add(key)
+            if not inspect.isclass(value):
+                raise TypeError("Column type hints must be classes, error with %s" % repr(value))
+            dtypes[key] = value
     elif isinstance(p, (list, set)):
         for el in p:
             subcolumns, subdtypes = _get_columns_dtypes(el)

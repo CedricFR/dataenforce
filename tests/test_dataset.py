@@ -44,6 +44,13 @@ def test_nested():
     assert DNameLocEtc.dtypes == {'id': int, 'name': object, "longitude": float, "latitude": float, "description": object}
     assert DNameLocEtc.only_specified == False
 
+def test_dict():
+    DName = Dataset[{"id": int, "name": object}]
+
+    assert DName.columns == {"id", "name"}
+    assert DName.dtypes == {"id": int, "name": object}
+    assert DName.only_specified == True
+
 def test_init():
     with pytest.raises(TypeError):
         Dataset()
